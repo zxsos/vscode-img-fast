@@ -144,6 +144,11 @@
           ],
           "default": "layout",
           "description": "%package.configuration.deletedFlag%"
+        },
+        "img-fast.customUrlPrefix": {
+          "type": "string",
+          "default": "",
+          "description": "Customize URL prefix (like  https://domian)"
         }
       }
     }

@@ -18,6 +18,7 @@ const defaultConfig = {
     deleteMethod: "DELETE",
     deleteQueryKey: "",
     deletedFlag: "layout",
+    customUrlPrefix: "",
 };
 
 function genConfig(config: WorkspaceConfiguration) {
