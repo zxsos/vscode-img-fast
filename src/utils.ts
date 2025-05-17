@@ -80,3 +80,8 @@ export function customFormat(fmt: string, image: Image) {
         return dateFormat(p1);
     });
 }
+
+export function extractSrc(str: string): string | null {
+    const match = str.match(/"src"\s*:\s*"([^"]+)"/);
+    return match ? match[1] : null;
+}

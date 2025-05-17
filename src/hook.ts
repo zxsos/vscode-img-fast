@@ -6,7 +6,7 @@ import localize from './localize';
 import { getConfig } from './config';
 import { writeRecord } from './record';
 import { IMAGE_DIR_PATH } from './constant';
-import { matchUrls, customFormat } from './utils';
+import { matchUrls, customFormat, extractSrc } from './utils';
 
 import type { AxiosResponse } from 'axios';
 import type { Image } from './image';
@@ -25,10 +25,15 @@ export function beforeUpload(image: Image) {
 }
 
 export function uploaded(res: AxiosResponse, image: Image) {
-    const { uploadedKey, outputRename } = getConfig();
+    const { uploadedKey, outputRename, customUrlPrefix } = getConfig();
 
-    image.url = uploadedKey && JSON.parse(res.data) && JSON.parse(res.data)[uploadedKey];
-    !image.url && (image.url = matchUrls(res.data.replace(/\\/g, ""))[0]);
+    const src = extractSrc(res.data.replace(/\\/g, ""));
+    if (src) {
+        image.url = (customUrlPrefix || "") + src;
+    } else {
+        image.url = uploadedKey && JSON.parse(res.data) && JSON.parse(res.data)[uploadedKey];
+        !image.url && (image.url = matchUrls(res.data.replace(/\\/g, ""))[0]);
+    }
     writeRecord(res, image);
 
     if (res.status !== 200) throw genHttpError(res, localize("hook.uploadStatusError"));
